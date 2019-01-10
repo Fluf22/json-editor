@@ -10,7 +10,7 @@
  * @example see README.md and docs/ for requirements, examples and usage info
  */
 
-;(function (global, factory) {
+; (function (global, factory) {
 	"use strict";
 	var JSONEditor = factory(global);
 	if (typeof module === "object" && module != null && module.exports) {

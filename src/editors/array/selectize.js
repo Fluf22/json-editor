@@ -1,12 +1,12 @@
 JSONEditor.defaults.editors.arraySelectize = JSONEditor.AbstractEditor.extend({
-  build: function() {
+  build: function () {
     this.title = this.theme.getFormInputLabel(this.getTitle());
 
     this.title_controls = this.theme.getHeaderButtonHolder();
     this.title.appendChild(this.title_controls);
     this.error_holder = document.createElement('div');
 
-    if(this.schema.description) {
+    if (this.schema.description) {
       this.description = this.theme.getDescription(this.schema.description);
     }
 
@@ -24,49 +24,49 @@ JSONEditor.defaults.editors.arraySelectize = JSONEditor.AbstractEditor.extend({
       create: true
     });
   },
-  postBuild: function() {
-      var self = this;
-      this.input.selectize.on('change', function(event) {
-          self.refreshValue();
-          self.onChange(true);
-      });
+  postBuild: function () {
+    var self = this;
+    this.input.selectize.on('change', function (event) {
+      self.refreshValue();
+      self.onChange(true);
+    });
   },
-  destroy: function() {
+  destroy: function () {
     this.empty(true);
-    if(this.title && this.title.parentNode) this.title.parentNode.removeChild(this.title);
-    if(this.description && this.description.parentNode) this.description.parentNode.removeChild(this.description);
-    if(this.input && this.input.parentNode) this.input.parentNode.removeChild(this.input);
+    if (this.title && this.title.parentNode) this.title.parentNode.removeChild(this.title);
+    if (this.description && this.description.parentNode) this.description.parentNode.removeChild(this.description);
+    if (this.input && this.input.parentNode) this.input.parentNode.removeChild(this.input);
 
     this._super();
   },
-  empty: function(hard) {},
-  setValue: function(value, initial) {
+  empty: function (hard) { },
+  setValue: function (value, initial) {
     var self = this;
     // Update the array's value, adding/removing rows when necessary
     value = value || [];
-    if(!(Array.isArray(value))) value = [value];
+    if (!(Array.isArray(value))) value = [value];
 
     this.input.selectize.clearOptions();
     this.input.selectize.clear(true);
 
-    value.forEach(function(item) {
-      self.input.selectize.addOption({text: item, value: item});
+    value.forEach(function (item) {
+      self.input.selectize.addOption({ text: item, value: item });
     });
     this.input.selectize.setValue(value);
 
     this.refreshValue(initial);
   },
-  refreshValue: function(force) {
+  refreshValue: function (force) {
     this.value = this.input.selectize.getValue();
   },
-  showValidationErrors: function(errors) {
+  showValidationErrors: function (errors) {
     var self = this;
 
     // Get all the errors that pertain to this editor
     var my_errors = [];
     var other_errors = [];
-    $each(errors, function(i,error) {
-      if(error.path === self.path) {
+    $each(errors, function (i, error) {
+      if (error.path === self.path) {
         my_errors.push(error);
       }
       else {
@@ -75,13 +75,13 @@ JSONEditor.defaults.editors.arraySelectize = JSONEditor.AbstractEditor.extend({
     });
 
     // Show errors for this editor
-    if(this.error_holder) {
+    if (this.error_holder) {
 
-      if(my_errors.length) {
+      if (my_errors.length) {
         var message = [];
         this.error_holder.innerHTML = '';
         this.error_holder.style.display = '';
-        $each(my_errors, function(i,error) {
+        $each(my_errors, function (i, error) {
           self.error_holder.appendChild(self.theme.getErrorMessage(error.message));
         });
       }

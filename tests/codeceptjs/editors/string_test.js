@@ -22,7 +22,7 @@ Scenario('should have coerent values', async (I) => {
 
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
-  assert.equal(value, JSON.stringify([{"editor":"__YELLOW__"}]));
+  assert.equal(value, JSON.stringify([{ "editor": "__YELLOW__" }]));
 });
 
 Scenario('should have correct initial value', async (I) => {
@@ -46,7 +46,7 @@ Scenario('editor value and String editor should have coerent values', async (I) 
 
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
-  assert.equal(value, JSON.stringify([{"editor":"<p>__YELLOW__<br></p>"}]));
+  assert.equal(value, JSON.stringify([{ "editor": "<p>__YELLOW__<br></p>" }]));
 });
 
 Scenario('Should work correctly in arrays @optional', async (I) => {
@@ -82,12 +82,12 @@ Scenario('Should work correctly in arrays @optional', async (I) => {
 
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
-  assert.equal(value, JSON.stringify([{"editor":"<p>__YELLOW__<br></p>"},{"editor":"<p>__BLUE__<br></p>"}]));
+  assert.equal(value, JSON.stringify([{ "editor": "<p>__YELLOW__<br></p>" }, { "editor": "<p>__BLUE__<br></p>" }]));
 
   I.click('.json-editor-btn-movedown');
   I.click('.get-value');
   value = await I.grabValueFrom('.debug');
-  assert.equal(value, JSON.stringify([{"editor":"<p>__BLUE__<br></p>"},{"editor":"<p>__YELLOW__<br></p>"}]));
+  assert.equal(value, JSON.stringify([{ "editor": "<p>__BLUE__<br></p>" }, { "editor": "<p>__YELLOW__<br></p>" }]));
 
   // the last 2 tests will fail because Sceditors iframes loose their content when the iframe is reloaded.
 

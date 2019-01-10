@@ -24,12 +24,12 @@ ToDo:
 JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend({
   build: function () {
     this._super();
-    if(!this.input) return;
+    if (!this.input) return;
 
     // Add required and placeholder text if available
     if (this.options.placeholder !== undefined) this.input.setAttribute('placeholder', this.options.placeholder);
 
-    if(window.flatpickr && typeof this.options.flatpickr == 'object') {
+    if (window.flatpickr && typeof this.options.flatpickr == 'object') {
 
       // Make sure that flatpickr settings matches the input type
       this.options.flatpickr.enableTime = this.schema.format == 'date' ? false : true;
@@ -39,7 +39,7 @@ JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend
       if (this.schema.type == 'integer') this.options.flatpickr.mode = 'single';
 
       // Attribute for flatpicker
-      this.input.setAttribute('data-input','');
+      this.input.setAttribute('data-input', '');
 
       var input = this.input;
 
@@ -48,15 +48,15 @@ JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend
         // Create buttons for input group
         var buttons = [];
         if (this.options.flatpickr.showToggleButton !== false) {
-          var toggleButton = this.getButton('',this.schema.format == 'time' ? 'time' :'calendar', this.translate('flatpickr_toggle_button'));
+          var toggleButton = this.getButton('', this.schema.format == 'time' ? 'time' : 'calendar', this.translate('flatpickr_toggle_button'));
           // Attribute for flatpicker
-          toggleButton.setAttribute('data-toggle','');
+          toggleButton.setAttribute('data-toggle', '');
           buttons.push(toggleButton);
         }
         if (this.options.flatpickr.showClearButton !== false) {
-          var clearButton = this.getButton('','clear', this.translate('flatpickr_clear_button'));
+          var clearButton = this.getButton('', 'clear', this.translate('flatpickr_clear_button'));
           // Attribute for flatpicker
-          clearButton.setAttribute('data-clear','');
+          clearButton.setAttribute('data-clear', '');
           buttons.push(clearButton);
         }
 
@@ -82,11 +82,11 @@ JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend
       this.flatpickr = window.flatpickr(input, this.options.flatpickr);
 
       if (this.options.flatpickr.inline === true && this.options.flatpickr.inlineHideInput === true) {
-          this.input.setAttribute('type','hidden');
+        this.input.setAttribute('type', 'hidden');
       }
     }
   },
-  getValue: function() {
+  getValue: function () {
     if (!this.dependenciesFulfilled) {
       return undefined;
     }
@@ -97,23 +97,23 @@ JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend
       return undefined;
     }
 
-    var value =  this.schema.format == 'time' ? '1970-01-01 ' + this.value : this.value;
+    var value = this.schema.format == 'time' ? '1970-01-01 ' + this.value : this.value;
     return parseInt(new Date(value).getTime() / 1000);
   },
-  setValue: function(value, initial, from_template) {
+  setValue: function (value, initial, from_template) {
     if (this.schema.type == 'string') {
       this._super(value, initial, from_template);
     }
-    else if (value > 0) { 
+    else if (value > 0) {
       var dateValue, dateObj = new Date(value * 1000),
-          year = dateObj.getFullYear(),
-          month = this.zeroPad(dateObj.getMonth() + 1),
-          day = this.zeroPad(dateObj.getDate()),
-          hour = this.zeroPad(dateObj.getHours()),
-          min = this.zeroPad(dateObj.getMinutes()),
-          sec = this.zeroPad(dateObj.getSeconds()),
-          date = [year, month, day].join('-'),
-          time = [hour, min, sec].join(':');
+        year = dateObj.getFullYear(),
+        month = this.zeroPad(dateObj.getMonth() + 1),
+        day = this.zeroPad(dateObj.getDate()),
+        hour = this.zeroPad(dateObj.getHours()),
+        min = this.zeroPad(dateObj.getMinutes()),
+        sec = this.zeroPad(dateObj.getSeconds()),
+        date = [year, month, day].join('-'),
+        time = [hour, min, sec].join(':');
 
       if (this.schema.format == 'date') dateValue = date;
       else if (this.schema.format == 'time') dateValue = time;
@@ -122,13 +122,13 @@ JSONEditor.defaults.editors.datetime = JSONEditor.defaults.editors.string.extend
       this.input.value = dateValue;
     }
   },
-  destroy: function() {
+  destroy: function () {
     if (this.flatpickr) this.flatpickr.destroy();
     this.flatpickr = null;
     this._super();
   },
   // helper function
-  zeroPad: function(value) {
+  zeroPad: function (value) {
     return ('0' + value).slice(-2);
   }
 });

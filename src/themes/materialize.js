@@ -8,7 +8,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
    * @param {int} size The grid column size.
    * @see http://materializecss.com/grid.html
    */
-  setGridColumnSize: function(el, size) {
+    setGridColumnSize: function (el, size) {
       el.classList.add('col');
       el.classList.add('s' + size);
     },
@@ -18,7 +18,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
    *
    * @returns {HTMLElement} The wrapped button element.
    */
-  getHeaderButtonHolder: function() {
+    getHeaderButtonHolder: function () {
       return this.getButtonHolder();
     },
 
@@ -27,7 +27,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
    *
    * @returns {HTMLElement} The wrapped button element.
    */
-  getButtonHolder: function() {
+    getButtonHolder: function () {
       return document.createElement('span');
     },
 
@@ -40,7 +40,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
    * @returns {HTMLElement} The button object.
    * @see http://materializecss.com/buttons.html
    */
-  getButton: function(text, icon, title) {
+    getButton: function (text, icon, title) {
 
       // Prepare icon.
       if (text) {
@@ -70,10 +70,10 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
    * @returns {HTMLElement} The assembled DOM element.
    * @see http://materializecss.com/forms.html
    */
-  getFormControl: function(label, input, description, infoText) {
+    getFormControl: function (label, input, description, infoText) {
 
       var ctrl,
-      type = input.type;
+        type = input.type;
 
       // Checkboxes get wrapped in p elements.
       if (type && type === 'checkbox') {
@@ -122,7 +122,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
 
     },
 
-  getDescription: function(text) {
+    getDescription: function (text) {
       var el = document.createElement('div');
       el.classList.add('grey-text');
       el.style.marginTop = '-15px';
@@ -136,7 +136,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
    * @param {string|HTMLElement} text The header text or element.
    * @returns {HTMLElement} The header element.
    */
-  getHeader: function(text) {
+    getHeader: function (text) {
 
       var el = document.createElement('h5');
 
@@ -150,7 +150,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
 
     },
 
-  getChildEditorHolder: function() {
+    getChildEditorHolder: function () {
 
       var el = document.createElement('div');
       el.marginBottom = '10px';
@@ -158,13 +158,13 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
 
     },
 
-  getIndentedPanel: function() {
+    getIndentedPanel: function () {
       var el = document.createElement("div");
       el.classList.add("card-panel");
       return el;
     },
 
-  getTable: function() {
+    getTable: function () {
 
       var el = document.createElement('table');
       el.classList.add('striped', 'bordered');
@@ -173,19 +173,19 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
 
     },
 
-  getTableRow: function() {
+    getTableRow: function () {
       return document.createElement('tr');
     },
 
-  getTableHead: function() {
+    getTableHead: function () {
       return document.createElement('thead');
     },
 
-  getTableBody: function() {
+    getTableBody: function () {
       return document.createElement('tbody');
     },
 
-  getTableHeaderCell: function(text) {
+    getTableHeaderCell: function (text) {
 
       var el = document.createElement('th');
       el.textContent = text;
@@ -193,7 +193,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
 
     },
 
-  getTableCell: function() {
+    getTableCell: function () {
 
       var el = document.createElement('td');
       return el;
@@ -206,9 +206,9 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
    * @returns {HTMLElement} The tab holder component.
    * @see https://github.com/Dogfalo/materialize/issues/2542#issuecomment-233458602
    */
-  getTabHolder: function() {
+    getTabHolder: function () {
 
-      var html =[
+      var html = [
         '<div class="col s2">',
         '   <ul class="tabs" style="height: auto; margin-top: 0.82rem; -ms-flex-direction: column; -webkit-flex-direction: column; flex-direction: column; display: -webkit-flex; display: flex;">',
         '   </ul>',
@@ -230,7 +230,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
    * @param {HTMLElement} holder The tab holder element.
    * @param {HTMLElement} tab The tab to add.
    */
-  addTab: function(holder, tab) {
+    addTab: function (holder, tab) {
       holder.children[0].children[0].appendChild(tab);
     },
 
@@ -241,19 +241,19 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
    * @returns {HTMLElement} The tab element.
    * @see https://github.com/Dogfalo/materialize/issues/2542#issuecomment-233458602
    */
-  getTab: function(span) {
+    getTab: function (span) {
 
       var el = document.createElement('li');
       el.classList.add('tab');
       el.style = el.style || {};
       this.applyStyles(el,
         {
-        width: '100%',
-        textAlign: 'left',
-        lineHeight: '24px',
-        height: '24px',
-        fontSize: '14px',
-        cursor: 'pointer'
+          width: '100%',
+          textAlign: 'left',
+          lineHeight: '24px',
+          height: '24px',
+          fontSize: '14px',
+          cursor: 'pointer'
         }
       );
       el.appendChild(span);
@@ -266,20 +266,20 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
    * @returns {HTMLElement} The tab element.
    * @see https://github.com/Dogfalo/materialize/issues/2542#issuecomment-233458602
    */
-  markTabActive: function(tab) {
+    markTabActive: function (tab) {
 
       tab.style = tab.style || {};
       this.applyStyles(tab,
         {
-        width: '100%',
-        textAlign: 'left',
-        lineHeight: '24px',
-        height: '24px',
-        fontSize: '14px',
-        cursor: 'pointer',
-        color: 'rgba(238,110,115,1)',
-        transition: 'border-color .5s ease',
-        borderRight: '3px solid #424242'
+          width: '100%',
+          textAlign: 'left',
+          lineHeight: '24px',
+          height: '24px',
+          fontSize: '14px',
+          cursor: 'pointer',
+          color: 'rgba(238,110,115,1)',
+          transition: 'border-color .5s ease',
+          borderRight: '3px solid #424242'
         }
       );
 
@@ -291,18 +291,18 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
    * @returns {HTMLElement} The tab element.
    * @see https://github.com/Dogfalo/materialize/issues/2542#issuecomment-233458602
    */
-  markTabInactive: function(tab) {
+    markTabInactive: function (tab) {
 
       tab.style = tab.style || {};
       this.applyStyles(tab,
         {
-        width: '100%',
-        textAlign: 'left',
-        lineHeight: '24px',
-        height: '24px',
-        fontSize: '14px',
-        cursor: 'pointer',
-        color: 'rgba(238,110,115,0.7)'
+          width: '100%',
+          textAlign: 'left',
+          lineHeight: '24px',
+          height: '24px',
+          fontSize: '14px',
+          cursor: 'pointer',
+          color: 'rgba(238,110,115,0.7)'
         }
       );
 
@@ -314,7 +314,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
    * @param {HTMLElement} tabHolder The full tab holder element.
    * @returns {HTMLElement} The content element inside specified tab holder.
    */
-  getTabContentHolder: function(tabHolder) {
+    getTabContentHolder: function (tabHolder) {
       return tabHolder.children[1];
     },
 
@@ -323,7 +323,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
    *
    * @returns {HTMLElement} The new tab content element.
    */
-  getTabContent: function() {
+    getTabContent: function () {
       return document.createElement('div');
     },
 
@@ -333,11 +333,11 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
    * @param {HTMLElement} input The input element that caused the error.
    * @param {string} text The error message.
    */
-  addInputError: function(input, text) {
+    addInputError: function (input, text) {
 
       // Get the parent element. Should most likely be a <div class="input-field" ... />.
       var parent = input.parentNode,
-      el;
+        el;
 
       if (!parent) return;
 
@@ -357,11 +357,11 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
    *
    * @param {HTMLElement} input The input element that previously caused the error.
    */
-  removeInputError: function(input) {
+    removeInputError: function (input) {
 
       // Get the parent element. Should most likely be a <div class="input-field" ... />.
       var parent = input.parentElement,
-      els;
+        els;
 
       if (!parent) return;
 
@@ -372,10 +372,10 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
 
     },
 
-  addTableRowError: function(row) {
+    addTableRowError: function (row) {
     },
 
-  removeTableRowError: function(row) {
+    removeTableRowError: function (row) {
     },
 
     /**
@@ -385,7 +385,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
    * @return {HTMLElement} The DOM element.
    * @see http://materializecss.com/forms.html#select
    */
-  getSelectInput: function(options) {
+    getSelectInput: function (options) {
 
       var select = this._super(options);
       select.classList.add('browser-default');
@@ -399,7 +399,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
    * @returns {HTMLElement} The DOM element.
    * @see http://materializecss.com/forms.html#textarea
    */
-  getTextareaInput: function() {
+    getTextareaInput: function () {
       var el = document.createElement('textarea');
       el.style.marginBottom = '5px';
       el.style.fontSize = '1rem';
@@ -407,7 +407,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
       return el;
     },
 
-  getCheckbox: function() {
+    getCheckbox: function () {
 
       var el = this.getFormInputField('checkbox');
       el.id = this.createUuid();
@@ -421,7 +421,7 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
    * @returns {HTMLElement} The modal DOM element.
    * @see http://materializecss.com/cards.html
    */
-  getModal: function() {
+    getModal: function () {
 
       var el = document.createElement('div');
       el.classList.add('card-panel', 'z-depth-3');
@@ -439,13 +439,12 @@ JSONEditor.defaults.themes.materialize = JSONEditor.AbstractTheme.extend(
    * @returns {string} A GUID.
    * @see https://stackoverflow.com/a/2117523
    */
-  createUuid: function() {
+    createUuid: function () {
 
-      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c)
-        {
-          var r = Math.random() * 16 | 0, v = c == 'x'? r: (r & 0x3 | 0x8);
-          return v.toString(16);
-        }
+      return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+      }
       );
 
     }

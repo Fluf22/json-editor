@@ -13,7 +13,7 @@ Scenario('should have correct initial value', async (I) => {
 Scenario('should respect step by incrementing and decrementing the value of a number', async (I) => {
   I.amOnPage('integer.html');
   I.seeElement('[data-schemapath="root.integer"] input');
-  I.executeScript(function() {
+  I.executeScript(function () {
     var range = document.querySelector('[data-schemapath="root.integer_number"] input');
     range.stepUp();
     var event = new Event('change', {
@@ -25,7 +25,7 @@ Scenario('should respect step by incrementing and decrementing the value of a nu
   I.click('.get-value');
   value = await I.grabValueFrom('.value');
   assert.equal(value, '{"integer":5,"integer_number":10,"integer_range":5}');
-  I.executeScript(function() {
+  I.executeScript(function () {
     var range = document.querySelector('[data-schemapath="root.integer_number"] input');
     range.stepDown();
     var event = new Event('change', {
@@ -42,7 +42,7 @@ Scenario('should respect step by incrementing and decrementing the value of a nu
 Scenario('should respect step by incrementing and decrementing the value of a range', async (I) => {
   I.amOnPage('integer.html');
   I.seeElement('[data-schemapath="root.integer_range"] input');
-  I.executeScript(function() {
+  I.executeScript(function () {
     var range = document.querySelector('[data-schemapath="root.integer_range"] input');
     range.stepUp();
     var event = new Event('change', {
@@ -54,7 +54,7 @@ Scenario('should respect step by incrementing and decrementing the value of a ra
   I.click('.get-value');
   value = await I.grabValueFrom('.value');
   assert.equal(value, '{"integer":5,"integer_number":5,"integer_range":10}');
-  I.executeScript(function() {
+  I.executeScript(function () {
     var range = document.querySelector('[data-schemapath="root.integer_range"] input');
     range.stepDown();
     var event = new Event('change', {

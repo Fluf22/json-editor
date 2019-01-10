@@ -1,8 +1,8 @@
 JSONEditor.defaults.editors.rating = JSONEditor.defaults.editors.integer.extend({
-  build: function() {
+  build: function () {
     var self = this, i;
-    if(!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle());
-    if(this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description);
+    if (!this.options.compact) this.header = this.label = this.theme.getFormInputLabel(this.getTitle());
+    if (this.schema.description) this.description = this.theme.getFormInputDescription(this.schema.description);
 
     // Dynamically add the required CSS the first time this editor is used
     var styleId = 'json-editor-style-rating';
@@ -82,13 +82,13 @@ JSONEditor.defaults.editors.rating = JSONEditor.defaults.editors.integer.extend(
     group.classList.add('rating');
     ratingContainer.appendChild(group);
 
-    if(this.options.compact) this.container.setAttribute('class',this.container.getAttribute('class')+' compact');
+    if (this.options.compact) this.container.setAttribute('class', this.container.getAttribute('class') + ' compact');
 
     var max = this.schema.maximum ? this.schema.maximum : 5;
     if (this.schema.exclusiveMaximum) max--;
 
     this.inputs = [];
-    for(i=max; i>0; i--) {
+    for (i = max; i > 0; i--) {
       var id = this.formname + i;
       var radioInput = this.theme.getFormInputField('radio');
       radioInput.setAttribute('id', id);
@@ -103,16 +103,16 @@ JSONEditor.defaults.editors.rating = JSONEditor.defaults.editors.integer.extend(
       group.appendChild(label);
     }
 
-    if(this.schema.readOnly || this.schema.readonly) {
+    if (this.schema.readOnly || this.schema.readonly) {
       this.always_disabled = true;
-      $each(this.inputs,function(i,input) {
+      $each(this.inputs, function (i, input) {
         group.setAttribute("readOnly", "readOnly");
         input.disabled = true;
       });
     }
 
     ratingContainer
-      .addEventListener('change',function(e) {
+      .addEventListener('change', function (e) {
         e.preventDefault();
         e.stopPropagation();
 
@@ -123,7 +123,7 @@ JSONEditor.defaults.editors.rating = JSONEditor.defaults.editors.integer.extend(
         self.refreshValue();
         self.watch_listener();
         self.jsoneditor.notifyWatchers(self.path);
-        if(self.parent) self.parent.onChildEditorChange(self);
+        if (self.parent) self.parent.onChildEditorChange(self);
         else self.jsoneditor.onChange();
       });
 
@@ -132,13 +132,13 @@ JSONEditor.defaults.editors.rating = JSONEditor.defaults.editors.integer.extend(
 
     this.refreshValue();
   },
-  setValue: function(val) {
+  setValue: function (val) {
     var sanitized = this.sanitize(val);
-    if(this.value === sanitized) {
+    if (this.value === sanitized) {
       return;
     }
     var self = this;
-    $each(this.inputs,function(i,input) {
+    $each(this.inputs, function (i, input) {
       if (input.value === sanitized) {
         input.checked = true;
         self.value = sanitized;

@@ -11,18 +11,18 @@ JSONEditor.AbstractIconLib = Class.extend({
     movedown: ''
   },
   icon_prefix: '',
-  getIconClass: function(key) {
-    if(this.mapping[key]) return this.icon_prefix+this.mapping[key];
+  getIconClass: function (key) {
+    if (this.mapping[key]) return this.icon_prefix + this.mapping[key];
     else return null;
   },
-  getIcon: function(key) {
+  getIcon: function (key) {
     var iconclass = this.getIconClass(key);
-    
-    if(!iconclass) return null;
-    
+
+    if (!iconclass) return null;
+
     var i = document.createElement('i');
     i.classList.add.apply(i.classList, iconclass.split(' '));
-    
+
     return i;
   }
 });

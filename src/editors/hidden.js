@@ -15,20 +15,20 @@ JSONEditor.defaults.editors.hidden = JSONEditor.AbstractEditor.extend({
   setValue: function (value, initial, from_template) {
     var self = this;
 
-    if(this.template && !from_template) {
+    if (this.template && !from_template) {
       return;
     }
 
-    if(value === null || typeof value === 'undefined') value = "";
-    else if(typeof value === "object") value = JSON.stringify(value);
-    else if(typeof value !== "string") value = ""+value;
+    if (value === null || typeof value === 'undefined') value = "";
+    else if (typeof value === "object") value = JSON.stringify(value);
+    else if (typeof value !== "string") value = "" + value;
 
-    if(value === this.serialized) return;
+    if (value === this.serialized) return;
 
     // Sanitize value before setting it
     var sanitized = this.sanitize(value);
 
-    if(this.input.value === sanitized) {
+    if (this.input.value === sanitized) {
       return;
     }
 
@@ -38,10 +38,10 @@ JSONEditor.defaults.editors.hidden = JSONEditor.AbstractEditor.extend({
 
     this.refreshValue();
 
-    if(initial) this.is_dirty = false;
-    else if(this.jsoneditor.options.show_errors === "change") this.is_dirty = true;
+    if (initial) this.is_dirty = false;
+    else if (this.jsoneditor.options.show_errors === "change") this.is_dirty = true;
 
-    if(this.adjust_height) this.adjust_height(this.input);
+    if (this.adjust_height) this.adjust_height(this.input);
 
     // Bubble this setValue to parents if the value changed
     this.onChange(changed);

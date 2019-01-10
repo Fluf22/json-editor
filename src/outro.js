@@ -1,2 +1,2 @@
-	return JSONEditor;
+return JSONEditor;
 });

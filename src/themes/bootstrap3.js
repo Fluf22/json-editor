@@ -1,78 +1,78 @@
 JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
-  getSelectInput: function(options) {
+  getSelectInput: function (options) {
     var el = this._super(options);
     el.classList.add('form-control');
     //el.style.width = 'auto';
     return el;
   },
-  setGridColumnSize: function(el,size) {
-    el.classList.add('col-md-'+size);
+  setGridColumnSize: function (el, size) {
+    el.classList.add('col-md-' + size);
   },
-  afterInputReady: function(input) {
-    if(input.controlgroup) return;
-    input.controlgroup = this.closest(input,'.form-group');
-    if(this.closest(input,'.compact')) {
+  afterInputReady: function (input) {
+    if (input.controlgroup) return;
+    input.controlgroup = this.closest(input, '.form-group');
+    if (this.closest(input, '.compact')) {
       input.controlgroup.style.marginBottom = 0;
     }
     if (this.queuedInputErrorText) {
-        var text = this.queuedInputErrorText;
-        delete this.queuedInputErrorText;
-        this.addInputError(input,text);
+      var text = this.queuedInputErrorText;
+      delete this.queuedInputErrorText;
+      this.addInputError(input, text);
     }
 
     // TODO: use bootstrap slider
   },
-  getTextareaInput: function() {
+  getTextareaInput: function () {
     var el = document.createElement('textarea');
     el.classList.add('form-control');
     return el;
   },
-  getRangeInput: function(min, max, step) {
+  getRangeInput: function (min, max, step) {
     // TODO: use better slider
     return this._super(min, max, step);
   },
-  getFormInputField: function(type) {
+  getFormInputField: function (type) {
     var el = this._super(type);
-    if(type !== 'checkbox') {
+    if (type !== 'checkbox') {
       el.classList.add('form-control');
     }
     return el;
   },
-  getFormControl: function(label, input, description, infoText) {
+  getFormControl: function (label, input, description, infoText) {
     var group = document.createElement('div');
 
-    if(label && input.type === 'checkbox') {
+    if (label && input.type === 'checkbox') {
       group.classList.add('checkbox');
       label.appendChild(input);
       label.style.fontSize = '14px';
       group.style.marginTop = '0';
-      if(infoText) group.appendChild(infoText);
+      if (infoText) group.appendChild(infoText);
       group.appendChild(label);
       input.style.position = 'relative';
       input.style.cssFloat = 'left';
     }
     else {
       group.classList.add('form-group');
-      if(label) {
+      if (label) {
         label.classList.add('control-label');
         group.appendChild(label);
       }
 
-      if(infoText) group.appendChild(infoText);
+      if (infoText) group.appendChild(infoText);
       group.appendChild(input);
     }
 
-    if(description) group.appendChild(description);
+    if (description) group.appendChild(description);
 
     return group;
   },
-  getIndentedPanel: function() {
+  getIndentedPanel: function () {
     var el = document.createElement('div');
     el.classList.add('well', 'well-sm');
     el.style.paddingBottom = 0;
     return el;
   },
-  getInfoButton: function(text) {
+  getInfoButton: function (text) {
     var icon = document.createElement('span');
     icon.classList.add('glyphicon', 'glyphicon-info-sign', 'pull-right');
     icon.style.padding = ".25rem";
@@ -91,10 +91,10 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
     tooltip.style.transform = "translateX(-27rem) translateY(-.5rem)";
     tooltip.style.position = "absolute";
     tooltip.innerText = text;
-    icon.onmouseover = function() {
+    icon.onmouseover = function () {
       tooltip.style.visibility = "visible";
     };
-    icon.onmouseleave = function() {
+    icon.onmouseleave = function () {
       tooltip.style.visibility = "hidden";
     };
 
@@ -102,28 +102,28 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
 
     return icon;
   },
-  getFormInputDescription: function(text) {
+  getFormInputDescription: function (text) {
     var el = document.createElement('p');
     el.classList.add('help-block');
     el.innerHTML = text;
     return el;
   },
-  getHeaderButtonHolder: function() {
+  getHeaderButtonHolder: function () {
     var el = this.getButtonHolder();
     el.style.marginLeft = '10px';
     return el;
   },
-  getButtonHolder: function() {
+  getButtonHolder: function () {
     var el = document.createElement('div');
     el.classList.add('btn-group');
     return el;
   },
-  getButton: function(text, icon, title) {
+  getButton: function (text, icon, title) {
     var el = this._super(text, icon, title);
     el.classList.add('btn', 'btn-default');
     return el;
   },
-  getTable: function() {
+  getTable: function () {
     var el = document.createElement('table');
     el.classList.add('table', 'table-bordered');
     el.style.width = 'auto';
@@ -131,13 +131,13 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
     return el;
   },
 
-  addInputError: function(input,text) {
-    if(!input.controlgroup) {
-        this.queuedInputErrorText = text;
-        return;
+  addInputError: function (input, text) {
+    if (!input.controlgroup) {
+      this.queuedInputErrorText = text;
+      return;
     }
     input.controlgroup.classList.add('has-error');
-    if(!input.errmsg) {
+    if (!input.errmsg) {
       input.errmsg = document.createElement('p');
       input.errmsg.classList.add('help-block', 'errormsg');
       input.controlgroup.appendChild(input.errmsg);
@@ -148,33 +148,33 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
 
     input.errmsg.textContent = text;
   },
-  removeInputError: function(input) {
-    if(!input.controlgroup) {
-        delete this.queuedInputErrorText;
+  removeInputError: function (input) {
+    if (!input.controlgroup) {
+      delete this.queuedInputErrorText;
     }
-    if(!input.errmsg) return;
+    if (!input.errmsg) return;
     input.errmsg.style.display = 'none';
     input.controlgroup.classList.remove('has-error');
   },
-  getTabHolder: function(propertyName) {
-    var pName = (typeof propertyName === 'undefined')? "" : propertyName;
+  getTabHolder: function (propertyName) {
+    var pName = (typeof propertyName === 'undefined') ? "" : propertyName;
     var el = document.createElement('div');
     el.innerHTML = "<ul class='col-md-2 nav nav-pills nav-stacked' id='" + pName + "' role='tablist'></ul>" +
       "<div class='col-md-10 tab-content well well-small'  id='" + pName + "'></div>";
     return el;
   },
-  getTopTabHolder: function(propertyName) {
-    var pName = (typeof propertyName === 'undefined')? "" : propertyName;
+  getTopTabHolder: function (propertyName) {
+    var pName = (typeof propertyName === 'undefined') ? "" : propertyName;
     var el = document.createElement('div');
     el.innerHTML = "<ul class='nav nav-tabs' id='" + pName + "' role='tablist'></ul>" +
       "<div class='tab-content well well-small'  id='" + pName + "'></div>";
     return el;
   },
-  getTab: function(text, tabId) {
+  getTab: function (text, tabId) {
     var li = document.createElement('li');
     li.setAttribute('role', 'presentation');
     var a = document.createElement('a');
-    a.setAttribute('href','#'+tabId);
+    a.setAttribute('href', '#' + tabId);
     a.appendChild(text);
     a.setAttribute('aria-controls', tabId);
     a.setAttribute('role', 'tab');
@@ -182,11 +182,11 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
     li.appendChild(a);
     return li;
   },
-  getTopTab: function(text, tabId) {
+  getTopTab: function (text, tabId) {
     var li = document.createElement('li');
     li.setAttribute('role', 'presentation');
     var a = document.createElement('a');
-    a.setAttribute('href','#'+tabId);
+    a.setAttribute('href', '#' + tabId);
     a.appendChild(text);
     a.setAttribute('aria-controls', tabId);
     a.setAttribute('role', 'tab');
@@ -194,39 +194,39 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
     li.appendChild(a);
     return li;
   },
-  getTabContent: function() {
+  getTabContent: function () {
     var el = document.createElement('div');
     el.classList.add('tab-pane');
     el.setAttribute('role', 'tabpanel');
     return el;
   },
-  getTopTabContent: function() {
+  getTopTabContent: function () {
     var el = document.createElement('div');
     el.classList.add('tab-pane');
     el.setAttribute('role', 'tabpanel');
     return el;
   },
-  markTabActive: function(row) {
+  markTabActive: function (row) {
     row.tab.classList.add('active');
 
-    if(typeof row.rowPane !== 'undefined'){
+    if (typeof row.rowPane !== 'undefined') {
       row.rowPane.classList.add('active');
     }
     else {
       row.container.classList.add('active');
     }
   },
-  markTabInactive: function(row) {
+  markTabInactive: function (row) {
     row.tab.classList.remove('active');
 
-    if(typeof row.rowPane !== 'undefined'){
+    if (typeof row.rowPane !== 'undefined') {
       row.rowPane.classList.remove('active');
     }
     else {
       row.container.classList.remove('active');
     }
   },
-  getProgressBar: function() {
+  getProgressBar: function () {
     var min = 0, max = 100, start = 0;
 
     var container = document.createElement('div');
@@ -243,7 +243,7 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
 
     return container;
   },
-  updateProgressBar: function(progressBar, progress) {
+  updateProgressBar: function (progressBar, progress) {
     if (!progressBar) return;
 
     var bar = progressBar.firstChild;
@@ -252,7 +252,7 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
     bar.style.width = percentage;
     bar.innerHTML = percentage;
   },
-  updateProgressBarUnknown: function(progressBar) {
+  updateProgressBarUnknown: function (progressBar) {
     if (!progressBar) return;
 
     var bar = progressBar.firstChild;
@@ -261,7 +261,7 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
     bar.style.width = '100%';
     bar.innerHTML = '';
   },
-  getInputGroup: function(input, buttons) {
+  getInputGroup: function (input, buttons) {
     if (!input) return;
 
     var inputGroupContainer = document.createElement('div');
@@ -272,7 +272,7 @@ JSONEditor.defaults.themes.bootstrap3 = JSONEditor.AbstractTheme.extend({
     inputGroup.classList.add('input-group-btn');
     inputGroupContainer.appendChild(inputGroup);
 
-    for(var i=0;i<buttons.length;i++) {
+    for (var i = 0; i < buttons.length; i++) {
       inputGroup.appendChild(buttons[i]);
     }
 

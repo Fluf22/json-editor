@@ -607,7 +607,7 @@ Scenario('should work well with nested array editors', async (I) => {
   // there are hidden "Delete All" buttons right now and "I.click(Delete All)"
   // will attempt to click the first match. It fails because is hidden.
   // this is why i use this script. is more flexible.
-  I.executeScript(function() {
+  I.executeScript(function () {
     var e = document.querySelectorAll('.json-editor-btn-delete');
     e[e.length - 1].click();
   });
@@ -616,7 +616,7 @@ Scenario('should work well with nested array editors', async (I) => {
   I.see('Array 1');
   I.see('Array 2');
   I.see('Array 3');
-  I.executeScript(function() {
+  I.executeScript(function () {
     var e = document.querySelectorAll('.json-editor-btn-delete');
     e[e.length - 1].click();
   });

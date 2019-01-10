@@ -1,5 +1,5 @@
 JSONEditor.defaults.editors.number = JSONEditor.defaults.editors.string.extend({
-  build: function() {
+  build: function () {
     this._super();
 
     if (typeof this.schema.minimum !== "undefined") {
@@ -31,16 +31,16 @@ JSONEditor.defaults.editors.number = JSONEditor.defaults.editors.string.extend({
     this.setInputAttributes(['maxlength', 'pattern', 'readonly', 'min', 'max', 'step']);
 
   },
-  sanitize: function(value) {
-    return (value+"").replace(/[^0-9\.\-eE]/g,'');
+  sanitize: function (value) {
+    return (value + "").replace(/[^0-9\.\-eE]/g, '');
   },
-  getNumColumns: function() {
+  getNumColumns: function () {
     return 2;
   },
-  getValue: function() {
+  getValue: function () {
     if (!this.dependenciesFulfilled) {
       return undefined;
     }
-    return this.value===''?undefined:this.value*1;
+    return this.value === '' ? undefined : this.value * 1;
   }
 });

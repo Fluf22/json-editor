@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function(grunt) {
+module.exports = function (grunt) {
   grunt.initConfig({
     'string-replace': {
       version: {
@@ -116,14 +116,14 @@ module.exports = function(grunt) {
       options: {
         browser: true,
         indent: 2,
-        devel:true,
+        devel: true,
         nonbsp: true,
         nonew: true,
         immed: true,
         latedef: true,
         globals: {
-            "module": true,
-            "define": true,
+          "module": true,
+          "define": true,
         }
       },
       beforeconcat: [
@@ -168,34 +168,34 @@ module.exports = function(grunt) {
       }
     },
     connect: {
-        default: {
-            options: {
-                port: 9000,
-                hostname: '0.0.0.0',
-                debug: true,
-                keepalive: true
-            }
-        },
-        testing: {
-            options: {
-                port: 9001,
-                hostname: '0.0.0.0',
-                debug: true,
-                keepalive: true
-            }
+      default: {
+        options: {
+          port: 9000,
+          hostname: '0.0.0.0',
+          debug: true,
+          keepalive: true
         }
+      },
+      testing: {
+        options: {
+          port: 9001,
+          hostname: '0.0.0.0',
+          debug: true,
+          keepalive: true
+        }
+      }
     },
     run: {
-        options: {
-            // Task-specific options
-        },
-        mocha: {
-            cmd: 'mocha',
-            args: [
-                'tests/selenium/*.js',
-                '--reporter=nyan'
-            ]
-        }
+      options: {
+        // Task-specific options
+      },
+      mocha: {
+        cmd: 'mocha',
+        args: [
+          'tests/selenium/*.js',
+          '--reporter=nyan'
+        ]
+      }
     }
   });
 
@@ -216,9 +216,9 @@ module.exports = function(grunt) {
   // Run mocha tests
   grunt.registerTask('test', ['run:mocha']);
 
-    // Default task.
-  grunt.registerTask('default', ['jshint:beforeconcat','concat','jshint:afterconcat','uglify','cssmin']);
+  // Default task.
+  grunt.registerTask('default', ['jshint:beforeconcat', 'concat', 'jshint:afterconcat', 'uglify', 'cssmin']);
 
-  grunt.registerTask('rawbuild', ['concat','uglify','cssmin']);
+  grunt.registerTask('rawbuild', ['concat', 'uglify', 'cssmin']);
 
 };

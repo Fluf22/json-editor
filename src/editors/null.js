@@ -1,14 +1,14 @@
 JSONEditor.defaults.editors["null"] = JSONEditor.AbstractEditor.extend({
-  getValue: function() {
+  getValue: function () {
     if (!this.dependenciesFulfilled) {
       return undefined;
     }
     return null;
   },
-  setValue: function() {
+  setValue: function () {
     this.onChange();
   },
-  getNumColumns: function() {
+  getNumColumns: function () {
     return 2;
   }
 });
