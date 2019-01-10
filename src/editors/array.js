@@ -130,10 +130,10 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
           this.title.appendChild(this.controls);
         }
         else {
-          this.panel.appendChild(this.controls);
-        }
+        this.panel.appendChild(this.controls);
       }
     }
+  }
     else {
       this.panel = this.theme.getIndentedPanel();
       this.container.appendChild(this.panel);
@@ -241,13 +241,15 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
       parent: this,
       required: true
     });
-    ret.preBuild();
-    ret.build();
-    ret.postBuild();
+    if (i === 0 || (this.schema.format !== 'tabs-top' && this.schema.format !== 'tabs')) {
+      ret.preBuild();
+      ret.build();
+      ret.postBuild();
 
-    if (!ret.title_controls) {
-      ret.array_controls = this.theme.getButtonHolder();
-      holder.appendChild(ret.array_controls);
+      if (!ret.title_controls) {
+        ret.array_controls = this.theme.getButtonHolder();
+        holder.appendChild(ret.array_controls);
+      }
     }
 
     return ret;
@@ -351,6 +353,11 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
       }
       else {
         self.addRow(val, initial);
+        self.refreshValue(initial);
+        self.refreshTabs(true);
+        self.refreshTabs();
+
+        self.onChange();
       }
     });
 
@@ -472,38 +479,13 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
       }
     }
   },
-  addRow: function (value, initial) {
-    var self = this;
-    var i = this.rows.length;
-
-    self.rows[i] = this.getElementEditor(i);
-    self.row_cache[i] = self.rows[i];
-
-    if (self.tabs_holder) {
-      self.rows[i].tab_text = document.createElement('span');
-      self.rows[i].tab_text.textContent = self.rows[i].getHeaderText();
-      if (self.schema.format === 'tabs-top') {
-        self.rows[i].tab = self.theme.getTopTab(self.rows[i].tab_text, this.getValidId(self.rows[i].path));
-        self.theme.addTopTab(self.tabs_holder, self.rows[i].tab);
-      }
-      else {
-        self.rows[i].tab = self.theme.getTab(self.rows[i].tab_text, this.getValidId(self.rows[i].path));
-        self.theme.addTab(self.tabs_holder, self.rows[i].tab);
-      }
-      self.rows[i].tab.addEventListener('click', function (e) {
-        self.active_tab = self.rows[i].tab;
-        self.refreshTabs();
-        e.preventDefault();
-        e.stopPropagation();
-      });
-
-    }
-
+  addArrayItemControls: function (self, i) {
+    self.rows[i].row_first_init = false;
     var controls_holder = self.rows[i].title_controls || self.rows[i].array_controls;
 
     // Buttons to delete row, move row up, and move row down
     if (!self.hide_delete_buttons) {
-      self.rows[i].delete_button = this.getButton(self.getItemTitle(), 'delete', this.translate('button_delete_row_title', [self.getItemTitle()]));
+      self.rows[i].delete_button = self.getButton(self.getItemTitle(), 'delete', self.translate('button_delete_row_title', [self.getItemTitle()]));
       self.rows[i].delete_button.classList.add('delete');
       self.rows[i].delete_button.setAttribute('data-i', i);
       self.rows[i].delete_button.addEventListener('click', function (e) {
@@ -529,8 +511,22 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
         self.setValue(newval);
 
         if (self.rows[i]) {
+          if (self.rows[i].value && Object.keys(self.rows[i].value).length === 0 && self.rows[i].value.constructor === Object) {
+            self.rows[i].preBuild();
+            self.rows[i].build();
+            self.rows[i].postBuild();
+            self.rows[i].setValue(self.rows[i].legacy_value);
+            self.addArrayItemControls(self, i);
+          }
           new_active_tab = self.rows[i].tab;
         } else if (self.rows[i - 1]) {
+          if (self.rows[i - 1].value && Object.keys(self.rows[i - 1].value).length === 0 && self.rows[i - 1].value.constructor === Object) {
+            self.rows[i - 1].preBuild();
+            self.rows[i - 1].build();
+            self.rows[i - 1].postBuild();
+            self.rows[i - 1].setValue(self.rows[i - 1].legacy_value);
+            self.addArrayItemControls(self, i - 1);
+          }
           new_active_tab = self.rows[i - 1].tab;
         }
 
@@ -549,7 +545,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
 
     //Button to copy an array element and add it as last element
     if (self.show_copy_button) {
-      self.rows[i].copy_button = this.getButton(self.getItemTitle(), 'copy', 'Copy ' + self.getItemTitle());
+      self.rows[i].copy_button = self.getButton(self.getItemTitle(), 'copy', 'Copy ' + self.getItemTitle());
       self.rows[i].copy_button.classList.add('copy');
       self.rows[i].copy_button.setAttribute('data-i', i);
       self.rows[i].copy_button.addEventListener('click', function (e) {
@@ -570,12 +566,14 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
 
       });
 
-      controls_holder.appendChild(self.rows[i].copy_button);
+      if (controls_holder) {
+        controls_holder.appendChild(self.rows[i].copy_button);
+      }
     }
 
 
     if (i && !self.hide_move_buttons) {
-      self.rows[i].moveup_button = this.getButton('', 'moveup', this.translate('button_move_up_title'));
+      self.rows[i].moveup_button = self.getButton('', 'moveup', self.translate('button_move_up_title'));
       self.rows[i].moveup_button.classList.add('moveup');
       self.rows[i].moveup_button.setAttribute('data-i', i);
       self.rows[i].moveup_button.addEventListener('click', function (e) {
@@ -584,6 +582,13 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
         var i = this.getAttribute('data-i') * 1;
 
         if (i <= 0) return;
+        if (self.rows[i - 1].value && Object.keys(self.rows[i - 1].value).length === 0 && self.rows[i - 1].value.constructor === Object) {
+          self.rows[i - 1].preBuild();
+          self.rows[i - 1].build();
+          self.rows[i - 1].postBuild();
+          self.rows[i - 1].setValue(self.rows[i - 1].legacy_value);
+          self.addArrayItemControls(self, i - 1);
+        }
         var rows = self.getValue();
         var tmp = rows[i - 1];
         rows[i - 1] = rows[i];
@@ -602,7 +607,7 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
     }
 
     if (!self.hide_move_buttons) {
-      self.rows[i].movedown_button = this.getButton('', 'movedown', this.translate('button_move_down_title'));
+      self.rows[i].movedown_button = self.getButton('', 'movedown', self.translate('button_move_down_title'));
       self.rows[i].movedown_button.classList.add('movedown');
       self.rows[i].movedown_button.setAttribute('data-i', i);
       self.rows[i].movedown_button.addEventListener('click', function (e) {
@@ -610,8 +615,15 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
         e.stopPropagation();
         var i = this.getAttribute('data-i') * 1;
 
+        if (i >= self.rows.length - 1) return;
+        if (self.rows[i + 1].value && Object.keys(self.rows[i + 1].value).length === 0 && self.rows[i + 1].value.constructor === Object) {
+          self.rows[i + 1].preBuild();
+          self.rows[i + 1].build();
+          self.rows[i + 1].postBuild();
+          self.rows[i + 1].setValue(self.rows[i + 1].legacy_value);
+          self.addArrayItemControls(self, i + 1);
+        }
         var rows = self.getValue();
-        if (i >= rows.length - 1) return;
         var tmp = rows[i + 1];
         rows[i + 1] = rows[i];
         rows[i] = tmp;
@@ -626,7 +638,81 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
         controls_holder.appendChild(self.rows[i].movedown_button);
       }
     }
+  },
+  addRow: function (value, initial) {
+    var self = this;
+    var i = this.rows.length;
+    var holder;
 
+    self.rows[i] = this.getElementEditor(i);
+    self.row_cache[i] = self.rows[i];
+
+    if (self.tabs_holder) {
+      self.rows[i].tab_text = document.createElement('span');
+      if (i === 0) {
+        if (value) {
+          self.rows[i].setValue(value);
+        }
+      } else {
+        if (value) {
+          self.rows[i].legacy_value = value;
+        } else if (!self.rows[i].value && !self.rows[i].legacy_value && !self.rows[i].row_first_init) {
+          self.rows[i].row_first_init = true;
+          self.rows[i].preBuild();
+          self.rows[i].build();
+          self.rows[i].postBuild();
+        }
+      }
+      if (self.rows[i].schema.headerTemplate) {
+        var header_template = self.rows[i].jsoneditor.compileTemplate(self.rows[i].schema.headerTemplate, self.rows[i].template_engine);
+        var vars = {
+          key: "" + i,
+          i: "" + i,
+          i0: (i * 1),
+          i1: (i * 1 + 1),
+          title: self.rows[i].getTitle(),
+          self: self.rows[i].legacy_value
+        };
+        self.rows[i].header_text = header_template(vars);
+      }
+      self.rows[i].tab_text.textContent = self.rows[i].getHeaderText();
+      if (self.schema.format === 'tabs-top') {
+        self.rows[i].tab = self.theme.getTopTab(self.rows[i].tab_text, self.rows[i].path);
+        self.theme.addTopTab(self.tabs_holder, self.rows[i].tab);
+      }
+      else {
+        self.rows[i].tab = self.theme.getTab(self.rows[i].tab_text, self.rows[i].path);
+        self.theme.addTab(self.tabs_holder, self.rows[i].tab);
+      }
+
+      self.rows[i].tab.addEventListener('click', function (e) {
+
+        if (self.rows[i].value && Object.keys(self.rows[i].value).length === 0 && self.rows[i].value.constructor === Object) {
+          self.rows[i].row_first_init = true;
+          self.rows[i].preBuild();
+          self.rows[i].build();
+          self.rows[i].postBuild();
+          self.rows[i].setValue(self.rows[i].legacy_value);
+        }
+
+        if (!self.rows[i].title_controls) {
+          self.rows[i].array_controls = self.rows[i].theme.getButtonHolder();
+          holder.appendChild(self.rows[i].array_controls);
+        }
+
+        if (self.rows[i].row_first_init) {
+          self.addArrayItemControls(self, i);
+        }
+
+        self.active_tab = self.rows[i].tab;
+        self.refreshTabs();
+        e.preventDefault();
+        e.stopPropagation();
+      });
+
+    }
+    self.addArrayItemControls(self, i);
+    self.refreshValue(true);
     if (value) self.rows[i].setValue(value, initial);
     self.refreshTabs();
   },
@@ -714,6 +800,13 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
 
       if (self.rows[self.rows.length - 1]) {
         new_active_tab = self.rows[self.rows.length - 1].tab;
+        if (self.rows[self.rows.length - 1].value && Object.keys(self.rows[self.rows.length - 1].value).length === 0 && self.rows[self.rows.length - 1].value.constructor === Object) {
+          self.rows[self.rows.length - 1].preBuild();
+          self.rows[self.rows.length - 1].build();
+          self.rows[self.rows.length - 1].postBuild();
+          self.rows[self.rows.length - 1].setValue(self.rows[self.rows.length - 1].legacy_value);
+          self.addArrayItemControls(self, self.rows.length - 1);
+        }
       }
 
       if (new_active_tab) {
