@@ -159,121 +159,121 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
       container = document.createElement('div');
 
       if (isCategoriesFormat) {
-      //A container for properties not object nor arrays
-      var containerSimple = document.createElement('div');
-      //This will be the place to (re)build tabs and panes
-      //tabs_holder has 2 childs, [0]: ul.nav.nav-tabs and [1]: div.tab-content
-      var newTabs_holder = this.theme.getTopTabHolder(this.schema.title);
-      //child [1] of previous, stores panes
-      var newTabPanesContainer = this.theme.getTopTabContentHolder(newTabs_holder);
+        //A container for properties not object nor arrays
+        var containerSimple = document.createElement('div');
+        //This will be the place to (re)build tabs and panes
+        //tabs_holder has 2 childs, [0]: ul.nav.nav-tabs and [1]: div.tab-content
+        var newTabs_holder = this.theme.getTopTabHolder(this.schema.title);
+        //child [1] of previous, stores panes
+        var newTabPanesContainer = this.theme.getTopTabContentHolder(newTabs_holder);
 
-      $each(this.property_order, function (i, key) {
-        var editor = self.editors[key];
-        if (editor.property_removed) return;
-        var aPane = self.theme.getTabContent();
-        var isObjOrArray = editor.schema && (editor.schema.type === "object" || editor.schema.type === "array");
-        //mark the pane
-        aPane.isObjOrArray = isObjOrArray;
-        var gridRow = self.theme.getGridRow();
+        $each(this.property_order, function (i, key) {
+          var editor = self.editors[key];
+          if (editor.property_removed) return;
+          var aPane = self.theme.getTabContent();
+          var isObjOrArray = editor.schema && (editor.schema.type === "object" || editor.schema.type === "array");
+          //mark the pane
+          aPane.isObjOrArray = isObjOrArray;
+          var gridRow = self.theme.getGridRow();
 
-        //this happens with added properties, they don't have a tab
-        if (!editor.tab) {
-          //Pass the pane which holds the editor
-          if (typeof self.basicPane === 'undefined') {
-            //There is no basicPane yet, so aPane will be it
-            self.addRow(editor, newTabs_holder, aPane);
+          //this happens with added properties, they don't have a tab
+          if (!editor.tab) {
+            //Pass the pane which holds the editor
+            if (typeof self.basicPane === 'undefined') {
+              //There is no basicPane yet, so aPane will be it
+              self.addRow(editor, newTabs_holder, aPane);
+            }
+            else {
+              self.addRow(editor, newTabs_holder, self.basicPane);
+            }
           }
-          else {
-            self.addRow(editor, newTabs_holder, self.basicPane);
-          }
-        }
 
-        aPane.id = self.getValidId(editor.tab_text.textContent);
+          aPane.id = self.getValidId(editor.tab_text.textContent);
 
-        //For simple properties, add them on the same panel (Basic)
-        if (!isObjOrArray) {
-          containerSimple.appendChild(gridRow);
-          //There are already some panes
-          if (newTabPanesContainer.childElementCount > 0) {
-            //If first pane is object or array, insert before a simple pane
-            if (newTabPanesContainer.firstChild.isObjOrArray) {
+          //For simple properties, add them on the same panel (Basic)
+          if (!isObjOrArray) {
+            containerSimple.appendChild(gridRow);
+            //There are already some panes
+            if (newTabPanesContainer.childElementCount > 0) {
+              //If first pane is object or array, insert before a simple pane
+              if (newTabPanesContainer.firstChild.isObjOrArray) {
+                //Append pane for simple properties
+                aPane.appendChild(containerSimple);
+                newTabPanesContainer.insertBefore(aPane, newTabPanesContainer.firstChild);
+                //Add "Basic" tab
+                self.theme.insertBasicTopTab(editor.tab, newTabs_holder);
+                //newTabs_holder.firstChild.insertBefore(editor.tab,newTabs_holder.firstChild.firstChild);
+                //Update the basicPane
+                editor.basicPane = aPane;
+              }
+              else {
+                //We already have a first "Basic" pane, just add the new property to it, so
+                //do nothing;
+              }
+            }
+            //There is no pane, so add the first (simple) pane
+            else {
               //Append pane for simple properties
               aPane.appendChild(containerSimple);
-              newTabPanesContainer.insertBefore(aPane, newTabPanesContainer.firstChild);
+              newTabPanesContainer.appendChild(aPane);
               //Add "Basic" tab
-              self.theme.insertBasicTopTab(editor.tab, newTabs_holder);
-              //newTabs_holder.firstChild.insertBefore(editor.tab,newTabs_holder.firstChild.firstChild);
+              //newTabs_holder.firstChild.appendChild(editor.tab);
+              self.theme.addTopTab(newTabs_holder, editor.tab);
               //Update the basicPane
               editor.basicPane = aPane;
             }
-            else {
-              //We already have a first "Basic" pane, just add the new property to it, so
-              //do nothing;
-            }
           }
-          //There is no pane, so add the first (simple) pane
+          //Objects and arrays earn it's own panes
           else {
-            //Append pane for simple properties
-            aPane.appendChild(containerSimple);
+            aPane.appendChild(gridRow);
             newTabPanesContainer.appendChild(aPane);
-            //Add "Basic" tab
             //newTabs_holder.firstChild.appendChild(editor.tab);
             self.theme.addTopTab(newTabs_holder, editor.tab);
-            //Update the basicPane
-            editor.basicPane = aPane;
           }
+
+          if (editor.options.hidden) editor.container.style.display = 'none';
+          else self.theme.setGridColumnSize(editor.container, 12);
+          //Now, add the property editor to the row
+          gridRow.appendChild(editor.container);
+          //Update the rowPane (same as self.rows[x].rowPane)
+          editor.rowPane = aPane;
+
+        });
+
+        //Erase old panes
+        while (this.tabPanesContainer.firstChild) {
+          this.tabPanesContainer.removeChild(this.tabPanesContainer.firstChild);
         }
-        //Objects and arrays earn it's own panes
-        else {
-          aPane.appendChild(gridRow);
-          newTabPanesContainer.appendChild(aPane);
-          //newTabs_holder.firstChild.appendChild(editor.tab);
-          self.theme.addTopTab(newTabs_holder, editor.tab);
+
+        //Erase old tabs and set the new ones
+        var parentTabs_holder = this.tabs_holder.parentNode;
+        parentTabs_holder.removeChild(parentTabs_holder.firstChild);
+        parentTabs_holder.appendChild(newTabs_holder);
+
+        this.tabPanesContainer = newTabPanesContainer;
+        this.tabs_holder = newTabs_holder;
+
+        //Activate the first tab
+        var firstTab = this.theme.getFirstTab(this.tabs_holder);
+        if (firstTab) {
+          $trigger(firstTab, 'click');
         }
-
-        if (editor.options.hidden) editor.container.style.display = 'none';
-        else self.theme.setGridColumnSize(editor.container, 12);
-        //Now, add the property editor to the row
-        gridRow.appendChild(editor.container);
-        //Update the rowPane (same as self.rows[x].rowPane)
-        editor.rowPane = aPane;
-
-      });
-
-      //Erase old panes
-      while (this.tabPanesContainer.firstChild) {
-        this.tabPanesContainer.removeChild(this.tabPanesContainer.firstChild);
+        return;
       }
+      //Normal layout
+      else {
+        $each(this.property_order, function (i, key) {
+          var editor = self.editors[key];
+          if (editor.property_removed) return;
+          var row = self.theme.getGridRow();
+          container.appendChild(row);
 
-      //Erase old tabs and set the new ones
-      var parentTabs_holder = this.tabs_holder.parentNode;
-      parentTabs_holder.removeChild(parentTabs_holder.firstChild);
-      parentTabs_holder.appendChild(newTabs_holder);
-
-      this.tabPanesContainer = newTabPanesContainer;
-      this.tabs_holder = newTabs_holder;
-
-      //Activate the first tab
-      var firstTab = this.theme.getFirstTab(this.tabs_holder);
-      if (firstTab) {
-        $trigger(firstTab, 'click');
+          if (editor.options.hidden) editor.container.style.display = 'none';
+          else self.theme.setGridColumnSize(editor.container, 12);
+          row.appendChild(editor.container);
+        });
       }
-      return;
     }
-    //Normal layout
-    else {
-      $each(this.property_order, function (i, key) {
-        var editor = self.editors[key];
-        if (editor.property_removed) return;
-        var row = self.theme.getGridRow();
-        container.appendChild(row);
-
-        if (editor.options.hidden) editor.container.style.display = 'none';
-        else self.theme.setGridColumnSize(editor.container, 12);
-        row.appendChild(editor.container);
-      });
-    }
-  }
     //for grid and normal layout
     while (this.row_container.firstChild) {
       this.row_container.removeChild(this.row_container.firstChild);
@@ -1101,7 +1101,7 @@ JSONEditor.defaults.editors.object = JSONEditor.AbstractEditor.extend({
     if (typeof value !== "object" || Array.isArray(value)) value = {};
 
     if (this.legacy_value && !this.cached_editors) {
-        this.legacy_value = value;
+      this.legacy_value = value;
     } else {
       // First, set the values for all of the defined properties
       $each(this.cached_editors, function (i, editor) {

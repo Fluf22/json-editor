@@ -414,9 +414,9 @@ JSONEditor.AbstractEditor = Class.extend({
     if (!this.dependenciesFulfilled) {
       return undefined;
     }
-    
+
     if (this.legacy_value && !(Object.keys(this.legacy_value).length === 0 && this.legacy_value.constructor === Object)) {
-        return this.legacy_value;
+      return this.legacy_value;
     }
     return this.value;
   },

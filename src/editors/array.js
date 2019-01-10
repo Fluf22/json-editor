@@ -130,10 +130,10 @@ JSONEditor.defaults.editors.array = JSONEditor.AbstractEditor.extend({
           this.title.appendChild(this.controls);
         }
         else {
-        this.panel.appendChild(this.controls);
+          this.panel.appendChild(this.controls);
+        }
       }
     }
-  }
     else {
       this.panel = this.theme.getIndentedPanel();
       this.container.appendChild(this.panel);
